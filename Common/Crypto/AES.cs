@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 namespace Common.Crypto
 {
     [Obsolete("方法已过时")]
-    sealed class AESCryptoUtil_old
+    public sealed class AESCryptoUtil_old
     {
         /// <summary>
         /// AES加密 128bit ECB Zero_padding
@@ -97,7 +97,7 @@ namespace Common.Crypto
     }
 
 
-    sealed class AESCryptoUtil
+    public sealed class AESCryptoUtil
     {
         /// <summary>
         /// AES加密 128bit ECB Zero_padding

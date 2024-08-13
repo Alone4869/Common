@@ -56,4 +56,17 @@ public class TestFunc
             Console.WriteLine(str);
         }
     }
+
+    public static void TestAES()
+    {
+        var data = "abc123";
+        var key = "1234567890123456";
+        var ret = Common.Crypto.AESCryptoUtil.Encrypt(data, key, out var encData);
+        if (ret == 0)
+        {
+            Console.WriteLine(encData);
+            ret = Common.Crypto.AESCryptoUtil.Decrypt(encData, key, out var str);
+            Console.WriteLine(str);
+        }
+    }
 }

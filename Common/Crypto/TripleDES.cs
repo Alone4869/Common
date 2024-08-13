@@ -1,4 +1,5 @@
 using System.Text;
+using Common.Converter;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Security;
@@ -7,13 +8,13 @@ namespace Common.Crypto
 {
     public sealed class TdesCryptoUtil
     {
-        public static int ECB_TriDes(int decryptFlag, string key, string data, out string result)
+        public static int TripleDesEcb(int decryptFlag, string key, string data, out string result)
         {
             try
             {
-                byte[] keyBytes = StringToHexbyte(key);
+                byte[] keyBytes =  ConvertHelper.StringToHexbyte(key);
 
-                byte[] plain = StringToHexbyte(data);
+                byte[] plain =  ConvertHelper.StringToHexbyte(data);
                 byte[]? byRst = null;
                 if (decryptFlag == 0)
                     byRst = TdesECB(true, keyBytes, plain);
@@ -26,7 +27,7 @@ namespace Common.Crypto
                     return -1;
                 }
 
-                result = HexbyteToString(byRst);
+                result = ConvertHelper.HexbyteToString(byRst);
                 return 0;
             }
             catch (Exception ex)
@@ -38,7 +39,7 @@ namespace Common.Crypto
 
 
 
-        public static byte[] TdesECB(bool encryptFlag, byte[] keyBytes, byte[] cipher, string algo = "DESede/ECB/NoPadding")
+        static byte[] TdesECB(bool encryptFlag, byte[] keyBytes, byte[] cipher, string algo = "DESede/ECB/NoPadding")
         {
             if (keyBytes.Length != 16) throw new ArgumentException("err key length");
             if (cipher.Length % 16 != 0) throw new ArgumentException("err data length");
@@ -47,34 +48,6 @@ namespace Common.Crypto
             IBufferedCipher c = CipherUtilities.GetCipher(algo);
             c.Init(encryptFlag, key);
             return c.DoFinal(cipher);
-        }
-
-        /// <summary>
-        /// 把字符串转换为16进制数组
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        static byte[] StringToHexbyte(string str)
-        {
-            str = str.Replace(" ", "");
-            if ((str.Length % 2) != 0)
-                str += "";
-            byte[] bytes = new byte[str.Length / 2];
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                bytes[i] = Convert.ToByte(str.Substring(i * 2, 2), 16);
-            }
-            return bytes;
-        }
-
-        static string HexbyteToString(byte[] data)
-        {
-            StringBuilder res = new StringBuilder();
-            for (int i = 0; i < data.Length; i++)
-            {
-                res.Append(data[i].ToString("X2"));
-            }
-            return res.ToString();
         }
 
     }

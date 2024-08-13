@@ -2,33 +2,39 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 using System.Text;
-
+using Common.Converter;
 
 namespace Common.Crypto
 {
     public sealed class SM4CryptoUtil
     {
 
-        public static int SM4_ECB(int decryptFlag, string key, string data, out string result)
+        /// <summary>
+        /// SM4 ECB加解密 填充方式 NoPadding
+        /// </summary>
+        /// <param name="encryptFlag">true:加密, false:解密</param>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public static int SM4_ECB(bool encryptFlag, string key, string data, out string result)
         {
             try
             {
-                byte[] keyBytes = StringToHexbyte(key);
+                byte[] keyBytes = ConvertHelper.StringToHexbyte(key);
 
-                byte[] plain = StringToHexbyte(data);
+                byte[] plain = ConvertHelper.StringToHexbyte(data);
                 byte[]? byRst = null;
-                if (decryptFlag == 0)
-                    byRst = Sm4ECB(true, keyBytes, plain);
-                else
-                    byRst = Sm4ECB(false, keyBytes, plain);
 
+                byRst = Sm4ECB(encryptFlag, keyBytes, plain);
+                
                 if (byRst == null)
                 {
                     result = "SM4 ECB出错";
                     return -1;
                 }
 
-                result = HexbyteToString(byRst);
+                result = ConvertHelper.HexbyteToString(byRst);
                 return 0;
             }
             catch (Exception ex)
@@ -39,36 +45,18 @@ namespace Common.Crypto
         }
 
 
+       
+
+
         /// <summary>
-        /// 把字符串转换为16进制数组
+        /// SM4 ECB加解密
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="encryptFlag"></param>
+        /// <param name="keyBytes"></param>
+        /// <param name="cipher"></param>
+        /// <param name="algo"></param>
         /// <returns></returns>
-        static byte[] StringToHexbyte(string str)
-        {
-            str = str.Replace(" ", "");
-            if ((str.Length % 2) != 0)
-                str += "";
-            byte[] bytes = new byte[str.Length / 2];
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                bytes[i] = Convert.ToByte(str.Substring(i * 2, 2), 16);
-            }
-            return bytes;
-        }
-
-        static string HexbyteToString(byte[] data)
-        {
-            StringBuilder res = new StringBuilder();
-            for (int i = 0; i < data.Length; i++)
-            {
-                res.Append(data[i].ToString("X2"));
-            }
-            return res.ToString();
-        }
-
-
-
+        /// <exception cref="ArgumentException"></exception>
         static byte[] Sm4ECB(bool encryptFlag, byte[] keyBytes, byte[] cipher, string algo = "SM4/ECB/NoPadding")
         {
             if (keyBytes.Length != 16) throw new ArgumentException("err key length");
