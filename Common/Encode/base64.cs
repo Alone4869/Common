@@ -7,44 +7,44 @@ namespace Common.Encode
         /// <summary>
         /// base64编码
         /// </summary>
-        /// <param name="code_type"></param>
-        /// <param name="code"></param>
-        /// <param name="errmsg"></param>
+        /// <param name="encoding"></param>
+        /// <param name="data"></param>
+        /// <param name="result"></param>
         /// <returns></returns>
-        public static int EncodeBase64(string code_type, string code, out string result)
+        public static int EncodeBase64(Encoding encoding,string data, out string result)
         {
             try
             {
-                byte[] bytes = Encoding.GetEncoding(code_type).GetBytes(code);
+                byte[] bytes = encoding.GetBytes(data);
 
                 result = Convert.ToBase64String(bytes);
                 return 0;
             }
             catch (Exception ex)
             {
-                result = $"base64编码出错({code_type})-{ex.Message}";
+                result = $"base64编码出错-{ex.Message}";
                 return -1;
             }
         }
         /// <summary>
         /// base64解码
         /// </summary>
-        /// <param name="code_type"></param>
-        /// <param name="code"></param>
-        /// <param name="errmsg"></param>
+        /// <param name="encoding"></param>
+        /// <param name="data"></param>
+        /// <param name="result"></param>
         /// <returns></returns>
-        public static int DecodeBase64(string code_type, string code, out string result)
+        public static int DecodeBase64(Encoding encoding, string data, out string result)
         {
             try
             {
-                byte[] bytes = Convert.FromBase64String(code);
+                byte[] bytes = Convert.FromBase64String(data);
 
-                result = Encoding.GetEncoding(code_type).GetString(bytes);
+                result = encoding.GetString(bytes);
                 return 0;
             }
             catch (Exception ex)
             {
-                result = $"base64解码出错({code_type})-{ex.Message}";
+                result = $"base64解码出错-{ex.Message}";
                 return -1;
             }
         }
@@ -57,7 +57,6 @@ namespace Common.Encode
         /// <returns></returns>
         public static bool IsBase64(string base64Str)
         {
-            bool res = false;
             // 如果字符串为空，或者长度不是4的倍数，则不是有效的Base64编码  
             if (string.IsNullOrEmpty(base64Str) || base64Str.Length % 4 != 0)
             {
