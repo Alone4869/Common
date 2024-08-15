@@ -8,19 +8,15 @@ namespace Common.Crypto
 {
     public sealed class TdesCryptoUtil
     {
-        public static int TripleDesEcb(int decryptFlag, string key, string data, out string result)
+        public static int TripleDesEcb(bool decryptFlag, string key, string data, out string result)
         {
             try
             {
                 byte[] keyBytes =  ConvertHelper.StringToHexbyte(key);
 
                 byte[] plain =  ConvertHelper.StringToHexbyte(data);
-                byte[]? byRst = null;
-                if (decryptFlag == 0)
-                    byRst = TdesECB(true, keyBytes, plain);
-                else
-                    byRst = TdesECB(false, keyBytes, plain);
-
+                byte[]? byRst = TdesECB(decryptFlag, keyBytes, plain);
+                
                 if (byRst == null)
                 {
                     result = "Tdes ECB出错";
@@ -52,7 +48,7 @@ namespace Common.Crypto
 
     }
 
-    sealed class TdesMac
+    public sealed class TdesMac
     {
 
 

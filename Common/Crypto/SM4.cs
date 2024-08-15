@@ -24,9 +24,7 @@ namespace Common.Crypto
                 byte[] keyBytes = ConvertHelper.StringToHexbyte(key);
 
                 byte[] plain = ConvertHelper.StringToHexbyte(data);
-                byte[]? byRst = null;
-
-                byRst = Sm4ECB(encryptFlag, keyBytes, plain);
+                byte[]? byRst = Sm4ECB(encryptFlag, keyBytes, plain);
                 
                 if (byRst == null)
                 {
