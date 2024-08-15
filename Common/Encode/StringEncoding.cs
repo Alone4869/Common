@@ -6,7 +6,7 @@ using System.Xml;
 
 namespace Common.Encode
 {
-    public sealed class Encodings
+    public sealed class StringEncoding
     {
         /// <summary>
         /// Hex 转 String

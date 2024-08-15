@@ -14,11 +14,11 @@ public class TestFunc
 
             Encoding encoding = Encoding.ASCII;
 
-            var ret = Encodings.StringToHex(data, encoding, out var hexString);
+            var ret = StringEncoding.StringToHex(data, encoding, out var hexString);
             if (ret == 0)
             {
                 Console.WriteLine(hexString);
-                ret = Encodings.HexToString(hexString, encoding, out var str);
+                ret = StringEncoding.HexToString(hexString, encoding, out var str);
                 Console.WriteLine(str);
             }
         }
@@ -32,11 +32,11 @@ public class TestFunc
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             Encoding encoding = Encoding.GetEncoding("GB2312");
 
-            var ret = Encodings.StringToHex(data, encoding, out var hexString);
+            var ret = StringEncoding.StringToHex(data, encoding, out var hexString);
             if (ret == 0)
             {
                 Console.WriteLine(hexString);
-                ret = Encodings.HexToString(hexString, encoding, out var str);
+                ret = StringEncoding.HexToString(hexString, encoding, out var str);
                 Console.WriteLine(str);
             }
         }
